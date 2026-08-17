@@ -2802,4 +2802,65 @@ body,
 /* ============================================================
    END — FINAL RESPONSIVE PATCH
    ============================================================ */
- 
+ /* ============================================================
+   CHURNIQ — MOBILE SIDEBAR TOGGLE FIX
+   ============================================================ */
+
+/* Hide Streamlit's native mobile sidebar control */
+[data-testid="collapsedControl"],
+[data-testid="stSidebarCollapsedControl"],
+[data-testid="stSidebarCollapseButton"] {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+
+/* Keep the custom ChurnIQ toggle usable */
+#sidebar_toggle {
+    position: relative !important;
+    z-index: 99999 !important;
+}
+
+
+/* Mobile layout */
+@media (max-width: 768px) {
+
+    /* Never allow the native Streamlit arrow to appear */
+    [data-testid="collapsedControl"],
+    [data-testid="stSidebarCollapsedControl"],
+    [data-testid="stSidebarCollapseButton"] {
+        display: none !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+    }
+
+    /* Custom toggle button */
+    #sidebar_toggle {
+        display: block !important;
+        width: auto !important;
+        min-width: 145px !important;
+        margin-bottom: 0.75rem !important;
+    }
+
+    #sidebar_toggle button {
+        width: auto !important;
+        min-height: 42px !important;
+        padding: 0.55rem 0.9rem !important;
+        font-size: 0.85rem !important;
+        border-radius: 10px !important;
+    }
+
+    /* Better mobile content width */
+    .block-container {
+        padding-left: 0.8rem !important;
+        padding-right: 0.8rem !important;
+        padding-top: 0.8rem !important;
+    }
+
+    /* Mobile sidebar */
+    section[data-testid="stSidebar"] {
+        max-width: 85vw !important;
+        width: 280px !important;
+    }
+}
