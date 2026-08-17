@@ -619,6 +619,47 @@ def download_csv(
         key=f"download_{filename}",
     )
 
+# ============================================================
+# SIDEBAR TOGGLE
+# ============================================================
+
+if "sidebar_hidden" not in st.session_state:
+    st.session_state.sidebar_hidden = False
+
+toggle_label = (
+    "☰ Show Sidebar"
+    if st.session_state.sidebar_hidden
+    else "☰ Hide Sidebar"
+)
+
+if st.button(
+    toggle_label,
+    key="sidebar_toggle",
+):
+    st.session_state.sidebar_hidden = (
+        not st.session_state.sidebar_hidden
+    )
+    st.rerun()
+
+if st.session_state.sidebar_hidden:
+    st.markdown(
+        """
+        <style>
+        section[data-testid="stSidebar"] {
+            display: none !important;
+        }
+
+        [data-testid="stSidebarCollapsedControl"] {
+            display: none !important;
+        }
+
+        [data-testid="collapsedControl"] {
+            display: none !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )    
 
 # ============================================================
 # SIDEBAR
