@@ -1,0 +1,2096 @@
+/* ============================================================
+   CHURNIQ — DESIGN SYSTEM v3
+   PROFESSIONAL LIGHT UI · SIGNAL / INTELLIGENCE DIRECTION
+   HIGH CONTRAST · STREAMLIT COMPATIBLE · RESPONSIVE
+
+   IMPORTANT:
+   SIDEBAR / NAVIGATION IS KEPT VISIBLE BY DEFAULT.
+   ============================================================ */
+
+
+/* ============================================================
+   1. COLOR SYSTEM
+   ============================================================ */
+
+:root {
+    --cq-bg: #f5f7fb;
+    --cq-white: #ffffff;
+
+    --cq-navy: #080c16;
+    --cq-navy-2: #142038;
+
+    --cq-blue: #4f46e5;
+    --cq-primary: #4f46e5;
+    --cq-indigo-deep: #3730a3;
+    --cq-indigo-light: #818cf8;
+    --cq-indigo-tint: #eef0fd;
+
+    --cq-text: #0f172a;
+    --cq-text-dark: #111827;
+    --cq-text-secondary: #334155;
+    --cq-text-muted: #64748b;
+
+    --cq-border: #e1e6f0;
+    --cq-border-light: #ecf0f7;
+
+    --cq-success: #047857;
+    --cq-success-bg: #ecfdf5;
+
+    --cq-warning: #b45309;
+    --cq-warning-bg: #fffbeb;
+
+    --cq-danger: #b91c1c;
+    --cq-danger-bg: #fef2f2;
+
+    --cq-shadow-sm:
+        0 2px 8px rgba(10, 14, 26, 0.06);
+
+    --cq-shadow-md:
+        0 10px 28px rgba(10, 14, 26, 0.09);
+
+    --cq-shadow-lg:
+        0 20px 48px rgba(10, 14, 26, 0.14);
+
+    --cq-font-display:
+        'Space Grotesk',
+        'Inter',
+        sans-serif;
+
+    --cq-font-body:
+        'Inter',
+        -apple-system,
+        BlinkMacSystemFont,
+        sans-serif;
+
+    --cq-font-mono:
+        'IBM Plex Mono',
+        'SFMono-Regular',
+        Consolas,
+        monospace;
+}
+
+
+/* ============================================================
+   2. GLOBAL APP
+   ============================================================ */
+
+.stApp {
+    background:
+        radial-gradient(
+            circle at 12% -10%,
+            rgba(79, 70, 229, 0.05),
+            transparent 42%
+        ),
+        linear-gradient(
+            180deg,
+            #f4f6fb 0%,
+            #ffffff 45%,
+            #f7f9fc 100%
+        );
+
+    color: var(--cq-text);
+    font-family: var(--cq-font-body);
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* ============================================================
+   3. HIDE ONLY UNNECESSARY STREAMLIT UI
+   ============================================================ */
+
+#MainMenu {
+    visibility: hidden;
+}
+
+footer {
+    visibility: hidden;
+}
+
+[data-testid="stToolbar"] {
+    visibility: hidden;
+}
+
+[data-testid="stDecoration"] {
+    visibility: hidden;
+}
+
+
+/*
+   IMPORTANT:
+   DO NOT HIDE HEADER.
+
+   Your previous CSS had:
+
+       header {
+           visibility: hidden;
+       }
+
+   This could hide Streamlit sidebar controls.
+
+   We keep the header technically present but visually minimal.
+*/
+
+header {
+    visibility: visible !important;
+    background: transparent !important;
+}
+
+
+/* ============================================================
+   4. MAIN CONTAINER
+   ============================================================ */
+
+.block-container {
+    max-width: 1450px;
+
+    padding-top: 1.5rem;
+    padding-bottom: 2.5rem;
+
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+
+/* ============================================================
+   5. GLOBAL TEXT VISIBILITY
+   ============================================================ */
+
+.stApp,
+.stApp p,
+.stApp span,
+.stApp label,
+.stApp div,
+.stApp li,
+.stApp td,
+.stApp th {
+    color: var(--cq-text);
+    font-family: var(--cq-font-body);
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--cq-text) !important;
+    font-family: var(--cq-font-display);
+    letter-spacing: -0.01em;
+}
+
+
+[data-testid="stMarkdownContainer"] p {
+    color: var(--cq-text-secondary);
+}
+
+
+[data-testid="stMarkdownContainer"] strong {
+    color: var(--cq-text-dark);
+}
+
+
+/* ============================================================
+   6. PERMANENT SIDEBAR / NAVIGATION
+   ============================================================ */
+
+/*
+   CORE FIX
+
+   Keep the sidebar visible.
+*/
+
+section[data-testid="stSidebar"] {
+    visibility: visible !important;
+    display: block !important;
+    opacity: 1 !important;
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--cq-navy) 0%,
+            #0d1526 55%,
+            var(--cq-navy-2) 100%
+        ) !important;
+
+    border-right:
+        1px solid rgba(255, 255, 255, 0.08);
+
+    min-width: 280px !important;
+    width: 280px !important;
+
+    transform: none !important;
+}
+
+
+/*
+   Sidebar inner container
+*/
+
+section[data-testid="stSidebar"] > div {
+    background:
+        linear-gradient(
+            180deg,
+            var(--cq-navy) 0%,
+            #0d1526 55%,
+            var(--cq-navy-2) 100%
+        ) !important;
+}
+
+
+/*
+   Sidebar main text
+*/
+
+section[data-testid="stSidebar"] p,
+section[data-testid="stSidebar"] span,
+section[data-testid="stSidebar"] label,
+section[data-testid="stSidebar"] div {
+    color: #ffffff;
+}
+
+
+/* ============================================================
+   7. SIDEBAR BRAND
+   ============================================================ */
+
+section[data-testid="stSidebar"] .churniq-sidebar-brand {
+    background: transparent !important;
+    color: #ffffff !important;
+
+    padding:
+        0.7rem
+        0.2rem
+        1rem
+        0.2rem;
+
+    border: none !important;
+    box-shadow: none !important;
+}
+
+
+section[data-testid="stSidebar"]
+.churniq-sidebar-brand * {
+    color: #ffffff !important;
+}
+
+
+section[data-testid="stSidebar"]
+.churniq-sidebar-title {
+    color: #ffffff !important;
+
+    font-family: var(--cq-font-display);
+
+    font-size: 1.55rem;
+
+    font-weight: 700;
+
+    line-height: 1.2;
+
+    letter-spacing: -0.01em;
+}
+
+
+section[data-testid="stSidebar"]
+.churniq-sidebar-subtitle {
+    color: #a9b4cc !important;
+
+    font-size: 0.78rem;
+
+    margin-top: 0.2rem;
+
+    opacity: 1 !important;
+}
+
+
+/* ============================================================
+   8. SIDEBAR DIVIDER
+   ============================================================ */
+
+section[data-testid="stSidebar"] hr {
+    border-color:
+        rgba(255, 255, 255, 0.14) !important;
+}
+
+
+/* ============================================================
+   9. SIDEBAR NAVIGATION HEADING
+   ============================================================ */
+
+section[data-testid="stSidebar"]
+[data-testid="stWidgetLabel"] {
+    color: #a9b4cc !important;
+
+    font-size: 0.74rem;
+
+    font-weight: 700;
+
+    letter-spacing: 0.08em;
+
+    text-transform: uppercase;
+}
+
+
+/* ============================================================
+   10. SIDEBAR RADIO NAVIGATION
+   ============================================================ */
+
+section[data-testid="stSidebar"]
+div[data-testid="stRadio"] {
+    width: 100%;
+}
+
+
+section[data-testid="stSidebar"]
+div[data-testid="stRadio"] label {
+    color: #ffffff !important;
+
+    background: transparent !important;
+
+    border-radius: 10px;
+
+    padding:
+        0.45rem
+        0.55rem;
+
+    font-weight: 600;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+/* Radio text */
+
+section[data-testid="stSidebar"]
+div[data-testid="stRadio"] label p {
+    color: #ffffff !important;
+}
+
+
+/* Hover */
+
+section[data-testid="stSidebar"]
+div[data-testid="stRadio"] label:hover {
+    background:
+        rgba(255, 255, 255, 0.08) !important;
+
+    transform:
+        translateX(2px);
+}
+
+
+/* Active navigation item */
+
+section[data-testid="stSidebar"]
+div[role="radiogroup"]
+label:has(input:checked) {
+    background:
+        rgba(79, 70, 229, 0.24) !important;
+
+    box-shadow:
+        inset 3px 0 0
+        var(--cq-indigo-light);
+
+    color: #ffffff !important;
+}
+
+
+section[data-testid="stSidebar"]
+div[role="radiogroup"]
+label:has(input:checked) p {
+    color: #ffffff !important;
+}
+
+
+/* Radio circle */
+
+section[data-testid="stSidebar"]
+input[type="radio"] {
+    accent-color:
+        var(--cq-indigo-light);
+}
+
+
+/* ============================================================
+   11. SIDEBAR UPLOADER
+   ============================================================ */
+
+section[data-testid="stSidebar"]
+[data-testid="stFileUploader"] {
+    background:
+        rgba(255, 255, 255, 0.06);
+
+    border:
+        1px dashed
+        rgba(255, 255, 255, 0.25);
+
+    border-radius: 14px;
+
+    padding: 0.5rem;
+}
+
+
+section[data-testid="stSidebar"]
+[data-testid="stFileUploader"] * {
+    color: #ffffff !important;
+}
+
+
+/* ============================================================
+   12. SIDEBAR HEADINGS
+   ============================================================ */
+
+section[data-testid="stSidebar"] h2,
+section[data-testid="stSidebar"] h3,
+section[data-testid="stSidebar"] h4 {
+    color: #ffffff !important;
+}
+
+
+section[data-testid="stSidebar"]
+.stCaption,
+section[data-testid="stSidebar"] small {
+    color: #a9b4cc !important;
+}
+
+
+/* ============================================================
+   13. DISABLE SIDEBAR COLLAPSE BUTTON
+   ============================================================ */
+
+/*
+   We don't want the sidebar disappearing.
+
+   Hide the collapse control itself.
+*/
+
+[data-testid="collapsedControl"] {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+
+/*
+   Hide alternative Streamlit sidebar controls.
+*/
+
+[data-testid="stSidebarCollapsedControl"] {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+
+[data-testid="stSidebarCollapseButton"] {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+
+/*
+   Sidebar collapse buttons by aria/title.
+*/
+
+section[data-testid="stSidebar"]
+button[aria-label*="sidebar" i],
+section[data-testid="stSidebar"]
+button[title*="sidebar" i] {
+    display: none !important;
+}
+
+
+/* ============================================================
+   14. MAIN FILE UPLOADER
+   ============================================================ */
+
+[data-testid="stFileUploader"] {
+    width: 100%;
+}
+
+
+[data-testid="stFileUploaderDropzone"] {
+    background: #ffffff !important;
+
+    border:
+        1.5px dashed
+        #a3aebd !important;
+
+    border-radius: 16px !important;
+
+    min-height: 150px;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+[data-testid="stFileUploaderDropzone"]:hover {
+    background:
+        var(--cq-indigo-tint) !important;
+
+    border-color:
+        var(--cq-primary) !important;
+
+    box-shadow:
+        0 5px 18px
+        rgba(79, 70, 229, 0.10);
+}
+
+
+[data-testid="stFileUploaderDropzone"],
+[data-testid="stFileUploaderDropzone"] *,
+[data-testid="stFileUploader"] label,
+[data-testid="stFileUploader"] span,
+[data-testid="stFileUploader"] small,
+[data-testid="stFileUploader"] p {
+    color: #1e293b !important;
+}
+
+
+[data-testid="stFileUploaderDropzone"] small {
+    color: #64748b !important;
+}
+
+
+[data-testid="stFileUploaderDropzone"] button {
+    background: #ffffff !important;
+
+    color:
+        var(--cq-indigo-deep) !important;
+
+    border:
+        1px solid
+        #b4b9f5 !important;
+
+    border-radius: 9px !important;
+
+    font-weight: 700 !important;
+}
+
+
+[data-testid="stFileUploaderDropzone"] button:hover {
+    background:
+        var(--cq-indigo-tint) !important;
+
+    color:
+        var(--cq-indigo-deep) !important;
+}
+
+
+[data-testid="stFileUploaderFileName"] {
+    color: #0f172a !important;
+
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   15. HERO
+   ============================================================ */
+
+.churniq-hero {
+    position: relative;
+
+    overflow: hidden;
+    isolation: isolate;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--cq-navy) 0%,
+            var(--cq-navy-2) 55%,
+            var(--cq-indigo-deep) 130%
+        );
+
+    padding:
+        2.35rem
+        2.5rem;
+
+    border-radius: 24px;
+
+    color: #ffffff;
+
+    margin-bottom: 1.6rem;
+
+    box-shadow:
+        var(--cq-shadow-lg);
+
+    animation:
+        cq-fade-up
+        0.6s
+        ease-out
+        both;
+}
+
+
+.churniq-hero,
+.churniq-hero * {
+    color: #ffffff !important;
+}
+
+
+.churniq-hero::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 0;
+
+    background-image:
+        radial-gradient(
+            rgba(255, 255, 255, 0.10)
+            1px,
+            transparent 1.5px
+        );
+
+    background-size: 22px 22px;
+
+    mask-image:
+        radial-gradient(
+            ellipse 85% 100% at 100% 0%,
+            #000 15%,
+            transparent 72%
+        );
+
+    -webkit-mask-image:
+        radial-gradient(
+            ellipse 85% 100% at 100% 0%,
+            #000 15%,
+            transparent 72%
+        );
+}
+
+
+.churniq-hero::after {
+    content: "";
+
+    position: absolute;
+
+    z-index: 0;
+
+    width: 320px;
+    height: 320px;
+
+    right: -100px;
+    top: -130px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(129, 140, 248, 0.38),
+            transparent 70%
+        );
+
+    border-radius: 50%;
+}
+
+
+.churniq-hero h1 {
+    position: relative;
+
+    z-index: 2;
+
+    color: #ffffff !important;
+
+    font-family:
+        var(--cq-font-display);
+
+    font-size: 2.5rem;
+
+    line-height: 1.12;
+
+    margin: 0;
+
+    font-weight: 700;
+
+    letter-spacing: -0.02em;
+}
+
+
+.churniq-hero p {
+    position: relative;
+
+    z-index: 2;
+
+    color:
+        rgba(255, 255, 255, 0.86) !important;
+
+    margin-top: 0.65rem;
+
+    margin-bottom: 0;
+
+    font-size: 1.02rem;
+
+    line-height: 1.6;
+
+    max-width: 950px;
+}
+
+
+/* ============================================================
+   16. SECTION TITLES
+   ============================================================ */
+
+.section-title {
+    color: #0f172a !important;
+
+    font-family:
+        var(--cq-font-display);
+
+    font-size: 1.45rem;
+
+    line-height: 1.25;
+
+    font-weight: 700;
+
+    letter-spacing: -0.01em;
+
+    margin-top: 1.3rem;
+
+    margin-bottom: 0.25rem;
+}
+
+
+.section-caption {
+    color: #64748b !important;
+
+    font-size: 0.92rem;
+
+    line-height: 1.55;
+
+    margin-bottom: 1.1rem;
+}
+
+
+/* ============================================================
+   17. METRIC CARDS
+   ============================================================ */
+
+.metric-card {
+    position: relative;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        var(--cq-border);
+
+    border-radius: 18px;
+
+    padding:
+        1.25rem
+        1.3rem;
+
+    min-height: 138px;
+
+    box-shadow:
+        var(--cq-shadow-sm);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+
+    animation:
+        cq-fade-up
+        0.5s
+        ease-out
+        both;
+}
+
+
+.metric-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--cq-primary),
+            var(--cq-indigo-light)
+        );
+
+    opacity: 0;
+
+    transition:
+        opacity 0.2s ease;
+}
+
+
+.metric-card:hover {
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        var(--cq-shadow-md);
+
+    border-color:
+        rgba(79, 70, 229, 0.22);
+}
+
+
+.metric-card:hover::before {
+    opacity: 1;
+}
+
+
+div[data-testid="stHorizontalBlock"]
+> div:nth-child(1)
+.metric-card {
+    animation-delay: 0.02s;
+}
+
+
+div[data-testid="stHorizontalBlock"]
+> div:nth-child(2)
+.metric-card {
+    animation-delay: 0.08s;
+}
+
+
+div[data-testid="stHorizontalBlock"]
+> div:nth-child(3)
+.metric-card {
+    animation-delay: 0.14s;
+}
+
+
+div[data-testid="stHorizontalBlock"]
+> div:nth-child(4)
+.metric-card {
+    animation-delay: 0.20s;
+}
+
+
+.metric-title {
+    color: #64748b !important;
+
+    font-size: 0.76rem;
+
+    font-weight: 750;
+
+    letter-spacing: 0.06em;
+
+    text-transform: uppercase;
+}
+
+
+.metric-value {
+    color: #0f172a !important;
+
+    font-family:
+        var(--cq-font-mono);
+
+    font-variant-numeric:
+        tabular-nums;
+
+    font-size: 1.9rem;
+
+    line-height: 1.15;
+
+    font-weight: 600;
+
+    margin-top: 0.45rem;
+
+    letter-spacing: -0.01em;
+}
+
+
+.metric-subtitle {
+    color: #64748b !important;
+
+    font-size: 0.76rem;
+
+    margin-top: 0.35rem;
+
+    line-height: 1.4;
+}
+
+
+/* ============================================================
+   18. INSIGHT CARDS
+   ============================================================ */
+
+.insight-card {
+    background: #ffffff;
+
+    border:
+        1px solid
+        var(--cq-border);
+
+    border-left:
+        4px solid
+        var(--cq-primary);
+
+    border-radius: 13px;
+
+    padding:
+        0.95rem
+        1.1rem;
+
+    margin-bottom: 0.7rem;
+
+    color: #334155 !important;
+
+    font-size: 0.9rem;
+
+    line-height: 1.55;
+
+    box-shadow:
+        0 3px 12px
+        rgba(10, 14, 26, 0.04);
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.insight-card:hover {
+    border-color:
+        var(--cq-border);
+
+    border-left-color:
+        var(--cq-indigo-deep);
+
+    box-shadow:
+        var(--cq-shadow-sm);
+}
+
+
+.insight-card strong {
+    color: #0f172a !important;
+}
+
+
+/* ============================================================
+   19. UPLOAD BOX
+   ============================================================ */
+
+.upload-box {
+    background: linear-gradient(
+        135deg,
+        #eff6ff,
+        #f8fbff
+    );
+
+    border: 1px dashed #93c5fd;
+    border-radius: 18px;
+
+    padding: 1.25rem 1.4rem;
+    margin-bottom: 0.8rem;
+
+    color: #0f172a;
+}
+
+.upload-box h3 {
+    color: #0f172a !important;
+    margin: 0 0 0.35rem 0;
+    font-size: 1.15rem;
+    font-weight: 750;
+}
+
+.upload-box p {
+    color: #475569 !important;
+    margin: 0;
+    font-size: 0.88rem;
+}
+
+/* ============================================================
+   20. STATUS BADGES
+   ============================================================ */
+
+.status-good {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 0.4rem;
+
+    background:
+        #ecfdf5;
+
+    color:
+        #047857 !important;
+
+    border:
+        1px solid
+        #a7f3d0;
+
+    border-radius: 999px;
+
+    padding:
+        0.32rem
+        0.75rem;
+
+    font-size: 0.76rem;
+
+    font-weight: 750;
+}
+
+
+.status-good::before {
+    content: "";
+
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background:
+        currentColor;
+
+    flex-shrink: 0;
+}
+
+
+.status-warning {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 0.4rem;
+
+    background:
+        #fffbeb;
+
+    color:
+        #b45309 !important;
+
+    border:
+        1px solid
+        #fde68a;
+
+    border-radius: 999px;
+
+    padding:
+        0.32rem
+        0.75rem;
+
+    font-size: 0.76rem;
+
+    font-weight: 750;
+}
+
+
+.status-warning::before {
+    content: "";
+
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background:
+        currentColor;
+
+    flex-shrink: 0;
+}
+
+
+/* ============================================================
+   21. STREAMLIT METRICS
+   ============================================================ */
+
+div[data-testid="stMetric"] {
+    background:
+        #ffffff !important;
+
+    border:
+        1px solid
+        var(--cq-border);
+
+    border-radius: 15px;
+
+    padding: 1rem;
+
+    box-shadow:
+        0 3px 12px
+        rgba(10, 14, 26, 0.04);
+}
+
+
+div[data-testid="stMetric"] label,
+div[data-testid="stMetricLabel"],
+div[data-testid="stMetricLabel"] *,
+div[data-testid="stMetric"] span {
+    color:
+        #64748b !important;
+}
+
+
+div[data-testid="stMetricValue"],
+div[data-testid="stMetricValue"] * {
+    color:
+        #0f172a !important;
+
+    font-family:
+        var(--cq-font-mono);
+
+    font-variant-numeric:
+        tabular-nums;
+
+    font-weight: 700;
+}
+
+
+/* ============================================================
+   22. BUTTONS
+   ============================================================ */
+
+.stButton > button {
+    background:
+        #ffffff !important;
+
+    color:
+        #0f172a !important;
+
+    border:
+        1px solid
+        #d5dee8 !important;
+
+    border-radius: 10px;
+
+    font-weight: 700;
+
+    min-height: 2.55rem;
+
+    transition:
+        all 0.2s ease;
+}
+
+
+.stButton > button:hover {
+    background:
+        var(--cq-indigo-tint) !important;
+
+    color:
+        var(--cq-indigo-deep) !important;
+
+    border-color:
+        #b4b9f5 !important;
+
+    transform:
+        translateY(-1px);
+}
+
+
+.stButton > button[kind="primary"] {
+    background:
+        linear-gradient(
+            135deg,
+            var(--cq-primary),
+            var(--cq-indigo-deep)
+        ) !important;
+
+    color:
+        #ffffff !important;
+
+    border: none !important;
+
+    box-shadow:
+        0 7px 18px
+        rgba(79, 70, 229, 0.24);
+}
+
+
+.stButton > button[kind="primary"] * {
+    color:
+        #ffffff !important;
+}
+
+
+.stButton > button[kind="primary"]:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #4338ca,
+            var(--cq-indigo-deep)
+        ) !important;
+
+    color:
+        #ffffff !important;
+}
+
+
+/* ============================================================
+   23. DOWNLOAD BUTTON
+   ============================================================ */
+
+.stDownloadButton > button {
+    background:
+        #ffffff !important;
+
+    color:
+        #1e2b5f !important;
+
+    border:
+        1px solid
+        #d5dee8 !important;
+
+    border-radius: 10px;
+
+    font-weight: 700;
+}
+
+
+.stDownloadButton > button * {
+    color:
+        #1e2b5f !important;
+}
+
+
+.stDownloadButton > button:hover {
+    background:
+        var(--cq-indigo-tint) !important;
+
+    color:
+        var(--cq-indigo-deep) !important;
+
+    border-color:
+        #b4b9f5 !important;
+}
+
+
+/* ============================================================
+   24. TEXT INPUT
+   ============================================================ */
+
+div[data-baseweb="input"] {
+    background:
+        #ffffff !important;
+
+    border-radius:
+        10px !important;
+
+    border-color:
+        #cbd5e1 !important;
+}
+
+
+div[data-baseweb="input"] input {
+    background:
+        #ffffff !important;
+
+    color:
+        #0f172a !important;
+
+    caret-color:
+        var(--cq-primary) !important;
+
+    font-family:
+        var(--cq-font-body);
+}
+
+
+div[data-baseweb="input"] input::placeholder {
+    color:
+        #94a3b8 !important;
+
+    opacity: 1 !important;
+}
+
+
+/* ============================================================
+   25. SELECTBOX
+   ============================================================ */
+
+div[data-baseweb="select"] {
+    background:
+        #ffffff !important;
+
+    border-radius:
+        10px !important;
+}
+
+
+div[data-baseweb="select"] * {
+    color:
+        #0f172a !important;
+}
+
+
+div[data-baseweb="select"] input {
+    color:
+        #0f172a !important;
+}
+
+
+ul[role="listbox"] {
+    background:
+        #ffffff !important;
+}
+
+
+ul[role="listbox"] li {
+    color:
+        #0f172a !important;
+
+    background:
+        #ffffff !important;
+}
+
+
+ul[role="listbox"] li:hover {
+    background:
+        var(--cq-indigo-tint) !important;
+
+    color:
+        var(--cq-indigo-deep) !important;
+}
+
+
+/* ============================================================
+   26. RADIO / CHECKBOX MAIN AREA
+   ============================================================ */
+
+.stApp div[data-testid="stRadio"] label {
+    color:
+        #334155 !important;
+}
+
+
+.stApp div[data-testid="stCheckbox"] label {
+    color:
+        #334155 !important;
+}
+
+
+.stApp input[type="radio"],
+.stApp input[type="checkbox"] {
+    accent-color:
+        var(--cq-primary);
+}
+
+
+/* ============================================================
+   27. DATAFRAME
+   ============================================================ */
+
+div[data-testid="stDataFrame"] {
+    background:
+        #ffffff !important;
+
+    border:
+        1px solid
+        var(--cq-border);
+
+    border-radius:
+        15px;
+
+    overflow:
+        hidden;
+
+    box-shadow:
+        0 3px 12px
+        rgba(10, 14, 26, 0.04);
+
+    animation:
+        cq-fade-up
+        0.5s
+        ease-out
+        both;
+}
+
+
+/* ============================================================
+   28. PLOTLY
+   ============================================================ */
+
+div[data-testid="stPlotlyChart"] {
+    position: relative;
+
+    background:
+        #ffffff;
+
+    border:
+        1px solid
+        var(--cq-border);
+
+    border-radius:
+        17px;
+
+    padding:
+        0.25rem;
+
+    box-shadow:
+        0 3px 12px
+        rgba(10, 14, 26, 0.04);
+
+    overflow:
+        hidden;
+
+    animation:
+        cq-fade-up
+        0.55s
+        ease-out
+        both;
+}
+
+
+div[data-testid="stHorizontalBlock"]
+> div:nth-child(1)
+div[data-testid="stPlotlyChart"] {
+    animation-delay:
+        0.03s;
+}
+
+
+div[data-testid="stHorizontalBlock"]
+> div:nth-child(2)
+div[data-testid="stPlotlyChart"] {
+    animation-delay:
+        0.10s;
+}
+
+
+/* ============================================================
+   29. EXPANDERS
+   ============================================================ */
+
+[data-testid="stExpander"] {
+    background:
+        #ffffff !important;
+
+    border:
+        1px solid
+        var(--cq-border) !important;
+
+    border-radius:
+        14px !important;
+
+    box-shadow:
+        0 3px 12px
+        rgba(10, 14, 26, 0.04);
+}
+
+
+[data-testid="stExpander"] summary {
+    color:
+        #0f172a !important;
+
+    font-weight:
+        700;
+}
+
+
+[data-testid="stExpander"] summary * {
+    color:
+        #0f172a !important;
+}
+
+
+/* ============================================================
+   30. ALERTS
+   ============================================================ */
+
+div[data-testid="stAlert"] {
+    border-radius:
+        13px !important;
+
+    border-width:
+        1px;
+
+    color:
+        #334155 !important;
+}
+
+
+div[data-testid="stAlert"] * {
+    color:
+        inherit !important;
+}
+
+
+/* ============================================================
+   31. SPINNER
+   ============================================================ */
+
+[data-testid="stSpinner"] {
+    color:
+        var(--cq-primary) !important;
+}
+
+
+/* ============================================================
+   32. TABS
+   ============================================================ */
+
+button[data-baseweb="tab"] {
+    color:
+        #64748b !important;
+
+    font-weight:
+        650;
+}
+
+
+button[data-baseweb="tab"][aria-selected="true"] {
+    color:
+        var(--cq-primary) !important;
+}
+
+
+/* ============================================================
+   33. LINKS
+   ============================================================ */
+
+.stApp a {
+    color:
+        var(--cq-primary) !important;
+
+    font-weight:
+        600;
+}
+
+
+.stApp a:hover {
+    color:
+        var(--cq-indigo-deep) !important;
+}
+
+
+/* ============================================================
+   34. FOOTER
+   ============================================================ */
+
+.cq-footer {
+    color:
+        #64748b !important;
+
+    text-align:
+        center;
+
+    font-size:
+        0.82rem;
+}
+
+
+/* ============================================================
+   35. TABLET
+   ============================================================ */
+
+@media (max-width: 1100px) {
+
+    .block-container {
+        padding-left:
+            1.2rem;
+
+        padding-right:
+            1.2rem;
+    }
+
+    .churniq-hero {
+        padding:
+            1.9rem;
+    }
+
+    .churniq-hero h1 {
+        font-size:
+            2.15rem;
+    }
+
+    .metric-card {
+        min-height:
+            125px;
+    }
+
+    .metric-value {
+        font-size:
+            1.65rem;
+    }
+}
+
+
+/* ============================================================
+   36. MOBILE
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+    .block-container {
+        padding-top:
+            1rem;
+
+        padding-left:
+            0.8rem;
+
+        padding-right:
+            0.8rem;
+
+        padding-bottom:
+            1.5rem;
+    }
+
+    /*
+       On mobile, allow Streamlit's normal responsive
+       sidebar behavior so content does not become too narrow.
+    */
+
+    section[data-testid="stSidebar"] {
+        min-width:
+            280px !important;
+
+        width:
+            280px !important;
+    }
+
+    .churniq-hero {
+        padding:
+            1.4rem;
+
+        border-radius:
+            18px;
+    }
+
+    .churniq-hero h1 {
+        font-size:
+            1.75rem;
+    }
+
+    .churniq-hero p {
+        font-size:
+            0.88rem;
+    }
+
+    .section-title {
+        font-size:
+            1.2rem;
+    }
+
+    .section-caption {
+        font-size:
+            0.84rem;
+    }
+
+    .metric-card {
+        min-height:
+            108px;
+
+        padding:
+            1rem;
+
+        border-radius:
+            15px;
+    }
+
+    .metric-title {
+        font-size:
+            0.68rem;
+    }
+
+    .metric-value {
+        font-size:
+            1.45rem;
+    }
+
+    .metric-subtitle {
+        font-size:
+            0.7rem;
+    }
+
+    .upload-box {
+        padding:
+            1rem;
+
+        border-radius:
+            15px;
+    }
+
+    [data-testid="stFileUploaderDropzone"] {
+        min-height:
+            135px;
+    }
+
+    div[data-testid="stPlotlyChart"] {
+        border-radius:
+            13px;
+    }
+}
+
+
+/* ============================================================
+   37. ACCESSIBILITY
+   ============================================================ */
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+    outline:
+        2px solid
+        var(--cq-indigo-light) !important;
+
+    outline-offset:
+        2px;
+}
+
+
+/* ============================================================
+   38. SCROLLBAR
+   ============================================================ */
+
+::-webkit-scrollbar {
+    width:
+        8px;
+
+    height:
+        8px;
+}
+
+
+::-webkit-scrollbar-track {
+    background:
+        #f1f5f9;
+}
+
+
+::-webkit-scrollbar-thumb {
+    background:
+        #cbd5e1;
+
+    border-radius:
+        999px;
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+    background:
+        var(--cq-indigo-light);
+}
+
+
+/* ============================================================
+   39. ANIMATION
+   ============================================================ */
+
+@keyframes cq-fade-up {
+
+    from {
+        opacity:
+            0;
+
+        transform:
+            translateY(10px);
+    }
+
+    to {
+        opacity:
+            1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    .churniq-hero,
+    .metric-card,
+    div[data-testid="stPlotlyChart"],
+    div[data-testid="stDataFrame"],
+    .stButton > button,
+    .stDownloadButton > button,
+    [data-testid="stFileUploaderDropzone"] {
+
+        animation:
+            none !important;
+
+        transition:
+            none !important;
+    }
+
+    .metric-card:hover {
+        transform:
+            none;
+    }
+}
+
+
+/* ============================================================
+   40. FINAL SIDEBAR VISIBILITY SAFETY NET
+   ============================================================ */
+
+/*
+   These rules come LAST intentionally.
+   They override any earlier Streamlit/sidebar rules.
+*/
+
+section[data-testid="stSidebar"] {
+    display:
+        block !important;
+
+    visibility:
+        visible !important;
+
+    opacity:
+        1 !important;
+}
+
+
+/*
+   Sidebar content remains visible.
+*/
+
+section[data-testid="stSidebar"] > div,
+section[data-testid="stSidebar"] > div > div {
+    visibility:
+        visible !important;
+
+    opacity:
+        1 !important;
+}
+
+
+/*
+   Navigation remains visible.
+*/
+
+section[data-testid="stSidebar"]
+div[data-testid="stRadio"] {
+    display:
+        block !important;
+
+    visibility:
+        visible !important;
+}
+
+
+/*
+   Navigation labels remain visible.
+*/
+
+section[data-testid="stSidebar"]
+div[data-testid="stRadio"] label {
+    visibility:
+        visible !important;
+
+    opacity:
+        1 !important;
+}
+
+
+/*
+   Prevent accidental transform-based hiding.
+*/
+
+section[data-testid="stSidebar"] {
+    transform:
+        none !important;
+}
+
+
+/*
+   Keep sidebar above the main application layer.
+*/
+
+section[data-testid="stSidebar"] {
+    z-index:
+        100000 !important;
+}
+
+/* ============================================================
+   FIX — STREAMLIT UPLOAD BUTTON TEXT OVERLAP
+   ============================================================ */
+
+/* Main upload button */
+[data-testid="stFileUploader"] button {
+    position: relative !important;
+
+    width: 150px !important;
+    min-width: 150px !important;
+    height: 52px !important;
+    min-height: 52px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    background: #ffffff !important;
+
+    border: 1px solid #a5b4fc !important;
+    border-radius: 12px !important;
+
+    color: #3730a3 !important;
+
+    font-family: var(--cq-font-body) !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+
+    line-height: 1 !important;
+
+    white-space: nowrap !important;
+
+    overflow: hidden !important;
+
+    box-sizing: border-box !important;
+}
+
+
+/* ------------------------------------------------------------
+   REMOVE DUPLICATE FIRST TEXT / CONTENT LAYER
+   ------------------------------------------------------------ */
+
+[data-testid="stFileUploader"] button > div:first-child {
+    display: none !important;
+}
+
+
+/* ------------------------------------------------------------
+   KEEP THE ACTUAL BUTTON CONTENT
+   ------------------------------------------------------------ */
+
+[data-testid="stFileUploader"] button > div:last-child {
+    display: flex !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+
+/* ------------------------------------------------------------
+   BUTTON TEXT
+   ------------------------------------------------------------ */
+
+[data-testid="stFileUploader"] button span {
+    display: inline-block !important;
+
+    position: static !important;
+
+    width: auto !important;
+    height: auto !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: #3730a3 !important;
+
+    font-family: var(--cq-font-body) !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+
+    line-height: 1.2 !important;
+
+    white-space: nowrap !important;
+}
+
+
+/* ------------------------------------------------------------
+   REMOVE ALL PSEUDO-ELEMENT TEXT
+   ------------------------------------------------------------ */
+
+[data-testid="stFileUploader"] button::before,
+[data-testid="stFileUploader"] button::after,
+[data-testid="stFileUploader"] button span::before,
+[data-testid="stFileUploader"] button span::after {
+    content: none !important;
+    display: none !important;
+}
+
+
+/* ------------------------------------------------------------
+   HOVER STATE
+   ------------------------------------------------------------ */
+
+[data-testid="stFileUploader"] button:hover {
+    background: #eef0fd !important;
+
+    border-color: #818cf8 !important;
+
+    color: #3730a3 !important;
+}
+
+
+/* ------------------------------------------------------------
+   HOVER TEXT
+   ------------------------------------------------------------ */
+
+[data-testid="stFileUploader"] button:hover span {
+    color: #3730a3 !important;
+}
+
+
+/* ------------------------------------------------------------
+   FOCUS STATE
+   ------------------------------------------------------------ */
+
+[data-testid="stFileUploader"] button:focus,
+[data-testid="stFileUploader"] button:focus-visible {
+    outline: 2px solid #818cf8 !important;
+    outline-offset: 2px !important;
+}
+
+
+/* ============================================================
+   SIDEBAR UPLOAD BUTTON
+   ============================================================ */
+
+section[data-testid="stSidebar"]
+[data-testid="stFileUploader"] button {
+    width: 150px !important;
+    min-width: 150px !important;
+
+    background: rgba(255, 255, 255, 0.08) !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+
+    color: #ffffff !important;
+}
+
+
+section[data-testid="stSidebar"]
+[data-testid="stFileUploader"] button span {
+    color: #ffffff !important;
+}
+
+
+section[data-testid="stSidebar"]
+[data-testid="stFileUploader"] button:hover {
+    background: rgba(255, 255, 255, 0.14) !important;
+
+    border-color: rgba(255, 255, 255, 0.5) !important;
+
+    color: #ffffff !important;
+}
+
+
+section[data-testid="stSidebar"]
+[data-testid="stFileUploader"] button:hover span {
+    color: #ffffff !important;
+}
+
+
+/* ============================================================
+   END — UPLOAD BUTTON FIX
+   ============================================================ */
+
+/* ============================================================
+   END — CHURNIQ DESIGN SYSTEM v3
+   ============================================================ */
+
+ 
