@@ -633,25 +633,24 @@ toggle_label = (
 )
 
 st.markdown(
-    '<div id="sidebar_toggle">',
+    '<div class="cq-sidebar-toggle">',
     unsafe_allow_html=True,
 )
 
-toggle_clicked = st.button(
+if st.button(
     toggle_label,
-    key="sidebar_toggle_button",
-)
-
-st.markdown(
-    '</div>',
-    unsafe_allow_html=True,
-)
-
-if toggle_clicked:
+    key="cq_sidebar_toggle",
+    use_container_width=False,
+):
     st.session_state.sidebar_hidden = (
         not st.session_state.sidebar_hidden
     )
     st.rerun()
+
+st.markdown(
+    "</div>",
+    unsafe_allow_html=True,
+)
 
 if st.session_state.sidebar_hidden:
     st.markdown(
@@ -659,20 +658,14 @@ if st.session_state.sidebar_hidden:
         <style>
         section[data-testid="stSidebar"] {
             display: none !important;
-        }
-
-        [data-testid="stSidebarCollapsedControl"] {
-            display: none !important;
-        }
-
-        [data-testid="collapsedControl"] {
-            display: none !important;
+            visibility: hidden !important;
+            width: 0 !important;
+            min-width: 0 !important;
         }
         </style>
         """,
         unsafe_allow_html=True,
-    )    
-
+    )
 # ============================================================
 # SIDEBAR
 # ============================================================
