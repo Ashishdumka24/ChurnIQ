@@ -2913,24 +2913,103 @@ body,
     z-index: 999999 !important;
 }
 
+/* ============================================================
+   CHURNIQ — PERMANENT SIDEBAR TOGGLE
+   TOP LEFT — PC + MOBILE
+   ============================================================ */
+
+.cq-sidebar-toggle {
+    position: fixed !important;
+
+    top: 12px !important;
+    left: 12px !important;
+
+    z-index: 2147483647 !important;
+
+    display: block !important;
+
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    width: auto !important;
+    height: auto !important;
+
+    pointer-events: auto !important;
+}
+
+.cq-sidebar-toggle .stButton {
+    display: block !important;
+
+    width: auto !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.cq-sidebar-toggle button {
+    display: inline-flex !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    min-height: 42px !important;
+
+    padding: 0.55rem 0.9rem !important;
+
+    border-radius: 10px !important;
+
+    font-size: 0.85rem !important;
+
+    font-weight: 700 !important;
+
+    white-space: nowrap !important;
+
+    position: relative !important;
+
+    z-index: 2147483647 !important;
+
+    pointer-events: auto !important;
+
+    touch-action: manipulation !important;
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
 @media (max-width: 768px) {
 
     .cq-sidebar-toggle {
         position: fixed !important;
-        top: 70px !important;
-        left: 220px !important;
-        z-index: 999999 !important;
+
+        top: 10px !important;
+        left: 10px !important;
+
+        z-index: 2147483647 !important;
+
         display: block !important;
+
         visibility: visible !important;
         opacity: 1 !important;
+
+        pointer-events: auto !important;
     }
 
     .cq-sidebar-toggle button {
         min-height: 44px !important;
+
         padding: 0.55rem 0.8rem !important;
+
         font-size: 0.8rem !important;
-        font-weight: 700 !important;
-        white-space: nowrap !important;
+
+        border-radius: 9px !important;
+
         pointer-events: auto !important;
+
+        touch-action: manipulation !important;
     }
 }
