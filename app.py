@@ -632,10 +632,22 @@ toggle_label = (
     else "☰ Hide Sidebar"
 )
 
-if st.button(
+st.markdown(
+    '<div id="sidebar_toggle">',
+    unsafe_allow_html=True,
+)
+
+toggle_clicked = st.button(
     toggle_label,
-    key="sidebar_toggle",
-):
+    key="sidebar_toggle_button",
+)
+
+st.markdown(
+    '</div>',
+    unsafe_allow_html=True,
+)
+
+if toggle_clicked:
     st.session_state.sidebar_hidden = (
         not st.session_state.sidebar_hidden
     )
