@@ -2892,3 +2892,15 @@ body,
         padding-top: 0.75rem !important;
     }
 }
+/* ============================================================
+   REMOVE STREAMLIT MOBILE SIDEBAR ARROW
+   ============================================================ */
+
+[data-testid="collapsedControl"],
+[data-testid="stSidebarCollapsedControl"],
+[data-testid="stSidebarCollapseButton"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
