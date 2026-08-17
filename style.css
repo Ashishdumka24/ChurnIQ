@@ -203,9 +203,9 @@ h6 {
 */
 
 section[data-testid="stSidebar"] {
-    visibility: visible !important;
-    display: block !important;
-    opacity: 1 !important;
+    visibility: visible;
+    display: block;
+    opacity: 1;
 
     background:
         linear-gradient(
@@ -459,46 +459,20 @@ section[data-testid="stSidebar"] small {
 
 
 /* ============================================================
-   13. DISABLE SIDEBAR COLLAPSE BUTTON
+   13. CUSTOM SIDEBAR TOGGLE
    ============================================================ */
 
-/*
-   We don't want the sidebar disappearing.
-
-   Hide the collapse control itself.
-*/
-
-[data-testid="collapsedControl"] {
-    display: none !important;
-    visibility: hidden !important;
+/* Keep sidebar transition smooth */
+section[data-testid="stSidebar"] {
+    transition:
+        width 0.25s ease,
+        min-width 0.25s ease,
+        opacity 0.2s ease;
 }
 
-
-/*
-   Hide alternative Streamlit sidebar controls.
-*/
-
-[data-testid="stSidebarCollapsedControl"] {
-    display: none !important;
-    visibility: hidden !important;
-}
-
-
-[data-testid="stSidebarCollapseButton"] {
-    display: none !important;
-    visibility: hidden !important;
-}
-
-
-/*
-   Sidebar collapse buttons by aria/title.
-*/
-
-section[data-testid="stSidebar"]
-button[aria-label*="sidebar" i],
-section[data-testid="stSidebar"]
-button[title*="sidebar" i] {
-    display: none !important;
+/* Custom sidebar toggle button */
+#sidebar_toggle {
+    font-weight: 700 !important;
 }
 
 
