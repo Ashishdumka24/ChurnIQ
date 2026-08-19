@@ -1587,47 +1587,88 @@ def references():
     story.append(PageBreak())
 
 
+def _find_shot(keywords):
+    """Find a screenshot for a dashboard page.
+
+    Files are matched on the page name, so a capture saved as
+    "executive_overview.png" or "01 Executive Overview.png" is picked up
+    automatically. Screenshots may also be numbered shot1.png .. shot8.png
+    in appendix order.
+    """
+    folder = FIG / "screenshots"
+    if not folder.is_dir():
+        folder = FIG
+    exts = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".bmp"}
+    cands = [f for f in sorted(folder.iterdir())
+             if f.is_file() and f.suffix.lower() in exts
+             and not f.name.startswith(("fig_", "dia_", "_logo",
+                                        "university_logo"))]
+    for f in cands:
+        norm = re.sub(r"[^a-z]", "", f.stem.lower())
+        if all(re.sub(r"[^a-z]", "", k.lower()) in norm for k in keywords):
+            return f
+    return None
+
+
 def appendix():
     mark_with("bm:apx", Paragraph("APPENDIX — DASHBOARD SCREENSHOTS",
                                   FRONTH))
-    story.append(Paragraph(
-        "The screen captures below must be taken from the running "
-        "application and inserted in place of the corresponding frames. No "
-        "screenshots have been generated artificially for this report. To "
-        "capture them, run <font face='Courier' size='10'>streamlit run "
-        "app.py</font>, load the default dataset and run the analysis from "
-        "the Prediction Center first, so that pages depending on prediction "
-        "results are populated.",
-        ParagraphStyle("nb", parent=BODY, fontSize=11, leading=16,
-                       backColor=colors.HexColor("#f4f4f4"),
-                       borderColor=BORDER, borderWidth=0.5, borderPadding=6,
-                       spaceBefore=2, spaceAfter=10)))
-
     items = [
-        ("A.1", "Executive Overview"),
-        ("A.2", "Dataset Center"),
-        ("A.3", "Prediction Center"),
-        ("A.4", "Churn Analysis"),
-        ("A.5", "Customer Segments"),
-        ("A.6", "Risk Center"),
-        ("A.7", "Model Performance"),
-        ("A.8", "Recommendations"),
+        ("A.1", "Executive Overview", ["executive"]),
+        ("A.2", "Dataset Center", ["dataset"]),
+        ("A.3", "Prediction Center", ["prediction"]),
+        ("A.4", "Churn Analysis", ["churn", "analysis"]),
+        ("A.5", "Customer Segments", ["segment"]),
+        ("A.6", "Risk Center", ["risk"]),
+        ("A.7", "Model Performance", ["model"]),
+        ("A.8", "Recommendations", ["recommend"]),
     ]
-    for num, title in items:
-        ph = Table([[Paragraph(
-            f"<i>[INSERT SCREENSHOT: {title}]</i>",
-            ParagraphStyle("ph", parent=BODYC, fontSize=10,
-                           textColor=colors.HexColor("#777777")))]],
-            colWidths=[12.4 * cm], rowHeights=[2.9 * cm],
-            style=TableStyle([
-                ("BOX", (0, 0), (-1, -1), 0.6, colors.HexColor("#aaaaaa")),
-                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                ("BACKGROUND", (0, 0), (-1, -1),
-                 colors.HexColor("#fafafa")),
-            ]), hAlign="CENTER")
+
+    found = [(n, t, _find_shot(k)) for n, t, k in items]
+    if not any(f for _, _, f in found):
+        story.append(Paragraph(
+            "The screen captures below must be taken from the running "
+            "application and inserted in place of the corresponding frames. "
+            "No screenshots have been generated artificially for this "
+            "report. To capture them, run <font face='Courier' size='10'>"
+            "streamlit run app.py</font>, load the default dataset and run "
+            "the analysis from the Prediction Center first, so that pages "
+            "depending on prediction results are populated.",
+            ParagraphStyle("nb", parent=BODY, fontSize=11, leading=16,
+                           backColor=colors.HexColor("#f4f4f4"),
+                           borderColor=BORDER, borderWidth=0.5,
+                           borderPadding=6, spaceBefore=2, spaceAfter=10)))
+    else:
+        p("The screen captures below were taken from the running "
+          "application using the reference dataset, with predictions "
+          "generated from the Prediction Center.")
+
+    from PIL import Image as PILImage
+    for num, title, path in found:
+        if path is not None:
+            iw, ih = PILImage.open(path).size
+            w = 11.8 * cm
+            h = w * ih / iw
+            if h > 4.55 * cm:                # four captures per page
+                h, w = 4.55 * cm, 4.55 * cm * iw / ih
+            block = Image(str(path), width=w, height=h)
+        else:
+            block = Table([[Paragraph(
+                f"<i>[INSERT SCREENSHOT: {title}]</i>",
+                ParagraphStyle("ph", parent=BODYC, fontSize=10,
+                               textColor=colors.HexColor("#777777")))]],
+                colWidths=[12.4 * cm], rowHeights=[2.9 * cm],
+                style=TableStyle([
+                    ("BOX", (0, 0), (-1, -1), 0.6,
+                     colors.HexColor("#aaaaaa")),
+                    ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                    ("BACKGROUND", (0, 0), (-1, -1),
+                     colors.HexColor("#fafafa")),
+                ]), hAlign="CENTER")
         story.append(KeepTogether([
-            ph,
-            Paragraph(f"<b>Figure {num}:</b> {title}", CAP),
+            block,
+            Paragraph(f"<b>Figure {num}:</b> {title}",
+                      ParagraphStyle("apxcap", parent=CAP, spaceAfter=7)),
         ]))
 
 
