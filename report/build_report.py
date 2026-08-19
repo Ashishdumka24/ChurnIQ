@@ -74,30 +74,93 @@ BORDER = colors.HexColor("#9aa5b1")
 ss = getSampleStyleSheet()
 
 
+# ==================================================================
+# FORMATTING CONFIGURATION
+# ------------------------------------------------------------------
+# Every layout value the college specification is likely to dictate is
+# collected here, so conforming the report to a required format means
+# editing this block only.
+#
+# Sizes are in points unless the name ends in _CM.
+# ==================================================================
+FMT = {
+    # --- page ---
+    "page_size":        A4,
+    "margin_left_cm":   2.4,
+    "margin_right_cm":  2.2,
+    "margin_top_cm":    2.0,
+    "margin_bottom_cm": 2.0,
+
+    # --- body text ---
+    "body_font":        "Times-Roman",
+    "body_bold":        "Times-Bold",
+    "body_italic":      "Times-Italic",
+    "body_size":        11.5,
+    "body_leading":     17.0,     # ~1.5 line spacing at 11.5pt
+    "body_align":       TA_JUSTIFY,
+    "para_space_after": 7,
+
+    # --- headings ---
+    "h1_size":          17,
+    "h1_leading":       22,
+    "h2_size":          13.5,
+    "h2_leading":       18,
+    "h3_size":          12,
+    "h3_leading":       16,
+    "front_h_size":     15,
+    "heading_colour":   True,     # False renders all headings in black
+
+    # --- tables, captions, code ---
+    "table_size":       9.5,
+    "table_leading":    12.5,
+    "caption_size":     9.5,
+    "code_size":        8.2,
+
+    # --- page furniture ---
+    "running_header":   True,
+    "page_numbers":     True,
+    "roman_front_matter": True,   # front matter i, ii, iii; body 1, 2, 3
+}
+
+
+def _sz(key):
+    return FMT[key]
+
+
 def S(name, **kw):
     kw.setdefault("parent", ss["Normal"])
     return ParagraphStyle(name, **kw)
 
 
-BODY = S("body", fontName="Times-Roman", fontSize=11.5, leading=17,
-         alignment=TA_JUSTIFY, spaceAfter=7)
+BODY = S("body", fontName=FMT["body_font"], fontSize=FMT["body_size"],
+         leading=FMT["body_leading"], alignment=FMT["body_align"],
+         spaceAfter=FMT["para_space_after"])
 BODYC = S("bodyc", parent=BODY, alignment=TA_CENTER)
-H1 = S("h1", fontName="Times-Bold", fontSize=17, leading=22, spaceBefore=4,
-       spaceAfter=13, textColor=NAVY)
-H2 = S("h2", fontName="Times-Bold", fontSize=13.5, leading=18, spaceBefore=13,
-       spaceAfter=6, textColor=NAVY)
-H3 = S("h3", fontName="Times-Bold", fontSize=12, leading=16, spaceBefore=9,
-       spaceAfter=4, textColor=colors.HexColor("#20465e"))
-FRONTH = S("fronth", fontName="Times-Bold", fontSize=15, leading=20,
-           alignment=TA_CENTER, spaceAfter=14, textColor=NAVY)
-CAP = S("cap", fontName="Times-Italic", fontSize=9.5, leading=13,
+_HCOL = NAVY if FMT["heading_colour"] else colors.black
+H1 = S("h1", fontName=FMT["body_bold"], fontSize=FMT["h1_size"],
+       leading=FMT["h1_leading"], spaceBefore=4, spaceAfter=13,
+       textColor=_HCOL)
+H2 = S("h2", fontName=FMT["body_bold"], fontSize=FMT["h2_size"],
+       leading=FMT["h2_leading"], spaceBefore=13, spaceAfter=6,
+       textColor=_HCOL)
+H3 = S("h3", fontName=FMT["body_bold"], fontSize=FMT["h3_size"],
+       leading=FMT["h3_leading"], spaceBefore=9, spaceAfter=4,
+       textColor=colors.HexColor("#20465e") if FMT["heading_colour"] else colors.black)
+FRONTH = S("fronth", fontName=FMT["body_bold"], fontSize=FMT["front_h_size"],
+           leading=FMT["front_h_size"] + 5, alignment=TA_CENTER,
+           spaceAfter=14, textColor=_HCOL)
+CAP = S("cap", fontName=FMT["body_italic"], fontSize=FMT["caption_size"],
+        leading=FMT["caption_size"] + 3.5,
         alignment=TA_CENTER, spaceBefore=4, spaceAfter=12,
         textColor=colors.HexColor("#333333"))
-TBLH = S("tblh", fontName="Times-Bold", fontSize=9.5, leading=12.5,
-         textColor=colors.white)
-TBL = S("tbl", fontName="Times-Roman", fontSize=9.5, leading=12.5)
-TBLB = S("tblb", fontName="Times-Bold", fontSize=9.5, leading=12.5)
-CODE = S("code", fontName="Courier", fontSize=8.2, leading=11.2,
+TBLH = S("tblh", fontName=FMT["body_bold"], fontSize=FMT["table_size"],
+         leading=FMT["table_leading"], textColor=colors.white)
+TBL = S("tbl", fontName=FMT["body_font"], fontSize=FMT["table_size"],
+        leading=FMT["table_leading"])
+TBLB = S("tblb", fontName=FMT["body_bold"], fontSize=FMT["table_size"],
+         leading=FMT["table_leading"])
+CODE = S("code", fontName="Courier", fontSize=FMT["code_size"],
+         leading=FMT["code_size"] + 3.0,
          backColor=colors.HexColor("#f6f8fa"), borderColor=BORDER,
          borderWidth=0.5, borderPadding=6, spaceBefore=4, spaceAfter=10)
 TOC = S("toc", fontName="Times-Roman", fontSize=11, leading=17)
@@ -137,6 +200,8 @@ class Marker(Flowable):
 
 def _printed_label(page):
     """Front matter uses roman numerals; the body uses arabic numbers."""
+    if not FMT["roman_front_matter"]:
+        return str(page)
     if page <= FRONT_MATTER_PAGES:
         return _roman(page)
     return str(page - FRONT_MATTER_PAGES)
@@ -307,17 +372,25 @@ def pct(v):
 # Page furniture
 # ==================================================================
 def later_pages(canvas, doc):
+    pw, ph = FMT["page_size"]
+    lm = FMT["margin_left_cm"] * cm
+    rm = FMT["margin_right_cm"] * cm
     canvas.saveState()
-    canvas.setFont("Times-Italic", 8.5)
-    canvas.setFillColor(colors.HexColor("#555555"))
-    canvas.drawString(2.4 * cm, A4[1] - 1.35 * cm,
-                      "ChurnIQ — Customer Churn Prediction & Business Intelligence System")
-    canvas.setStrokeColor(BORDER)
-    canvas.setLineWidth(0.5)
-    canvas.line(2.4 * cm, A4[1] - 1.5 * cm, A4[0] - 2.2 * cm, A4[1] - 1.5 * cm)
-    canvas.line(2.4 * cm, 1.55 * cm, A4[0] - 2.2 * cm, 1.55 * cm)
-    canvas.setFont("Times-Roman", 9)
-    canvas.drawCentredString(A4[0] / 2, 1.05 * cm, _printed_label(doc.page))
+    if FMT["running_header"]:
+        canvas.setFont(FMT["body_italic"], 8.5)
+        canvas.setFillColor(colors.HexColor("#555555"))
+        canvas.drawString(lm, ph - 1.35 * cm,
+                          "ChurnIQ — Customer Churn Prediction & "
+                          "Business Intelligence System")
+        canvas.setStrokeColor(BORDER)
+        canvas.setLineWidth(0.5)
+        canvas.line(lm, ph - 1.5 * cm, pw - rm, ph - 1.5 * cm)
+    if FMT["page_numbers"]:
+        canvas.setStrokeColor(BORDER)
+        canvas.setLineWidth(0.5)
+        canvas.line(lm, 1.55 * cm, pw - rm, 1.55 * cm)
+        canvas.setFont(FMT["body_font"], 9)
+        canvas.drawCentredString(pw / 2, 1.05 * cm, _printed_label(doc.page))
     canvas.restoreState()
 
 
@@ -325,24 +398,14 @@ def first_page(canvas, doc):
     canvas.saveState()
     canvas.setStrokeColor(NAVY)
     canvas.setLineWidth(2.2)
-    canvas.rect(1.35 * cm, 1.35 * cm, A4[0] - 2.7 * cm, A4[1] - 2.7 * cm)
+    canvas.rect(1.35 * cm, 1.35 * cm,
+                FMT["page_size"][0] - 2.7 * cm, FMT["page_size"][1] - 2.7 * cm)
     canvas.setLineWidth(0.6)
-    canvas.rect(1.6 * cm, 1.6 * cm, A4[0] - 3.2 * cm, A4[1] - 3.2 * cm)
+    canvas.rect(1.6 * cm, 1.6 * cm,
+                FMT["page_size"][0] - 3.2 * cm, FMT["page_size"][1] - 3.2 * cm)
     canvas.restoreState()
 
 
-doc = BaseDocTemplate(
-    str(OUT), pagesize=A4,
-    leftMargin=2.4 * cm, rightMargin=2.2 * cm,
-    topMargin=2.0 * cm, bottomMargin=2.0 * cm,
-    title="ChurnIQ — Customer Churn Prediction & Business Intelligence System",
-    author="[STUDENT NAME]", subject="Project Report",
-)
-frame = Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height, id="n")
-doc.addPageTemplates([
-    PageTemplate(id="First", frames=[frame], onPage=first_page),
-    PageTemplate(id="Later", frames=[frame], onPage=later_pages),
-])
 
 
 # ==================================================================
@@ -4167,9 +4230,11 @@ def build_story():
 
 def make_doc():
     d = BaseDocTemplate(
-        str(OUT), pagesize=A4,
-        leftMargin=2.4 * cm, rightMargin=2.2 * cm,
-        topMargin=2.0 * cm, bottomMargin=2.0 * cm,
+        str(OUT), pagesize=FMT["page_size"],
+        leftMargin=FMT["margin_left_cm"] * cm,
+        rightMargin=FMT["margin_right_cm"] * cm,
+        topMargin=FMT["margin_top_cm"] * cm,
+        bottomMargin=FMT["margin_bottom_cm"] * cm,
         title="ChurnIQ — Customer Churn Prediction & Business Intelligence System",
         author="[STUDENT NAME]", subject="Project Report",
     )

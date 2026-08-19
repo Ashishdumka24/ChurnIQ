@@ -50,6 +50,44 @@ Converged after 3 pass(es); front matter = 15 pages.
 If it ever reports that numbering did not settle, the page numbers in the
 front matter should not be trusted.
 
+## Conforming to a college format specification
+
+All layout values are collected in a single `FMT` dictionary near the top of
+`build_report.py`, so matching a required format means editing one block and
+rebuilding — no hunting through 4,000 lines.
+
+```python
+FMT = {
+    "page_size":        A4,
+    "margin_left_cm":   2.4,     # wider left margin for binding
+    "margin_right_cm":  2.2,
+    "margin_top_cm":    2.0,
+    "margin_bottom_cm": 2.0,
+
+    "body_font":        "Times-Roman",
+    "body_size":        11.5,
+    "body_leading":     17.0,    # line spacing, in points
+    ...
+}
+```
+
+Common requirements and the values that satisfy them:
+
+| Requirement | Change |
+| --- | --- |
+| Times New Roman 12 pt | `"body_size": 12.0` |
+| 1.5 line spacing | `"body_leading": body_size * 1.5` (e.g. `18.0`) |
+| Double line spacing | `"body_leading": body_size * 2` (e.g. `24.0`) |
+| 1.5 inch left margin | `"margin_left_cm": 3.81` |
+| 1 inch other margins | `"margin_right/top/bottom_cm": 2.54` |
+| Black-and-white printing | `"heading_colour": False` |
+| Continuous arabic numbering | `"roman_front_matter": False` |
+| No running header | `"running_header": False` |
+
+Changing spacing or margins changes the page count, but the page numbers in
+the table of contents and the two lists are recomputed automatically on every
+build, so they stay correct without any manual work.
+
 ## Before submitting
 
 Two things still need your input.
