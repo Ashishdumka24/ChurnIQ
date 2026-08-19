@@ -323,6 +323,19 @@ def table(data, caption=None, chapter=None, widths=None, fs=None,
     sp(7)
 
 
+def plain_table(rows, widths):
+    """Two-column layout block with no visible grid (signatures, dates)."""
+    t = Table(rows, colWidths=widths, hAlign="CENTER")
+    t.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+        ("TOPPADDING", (0, 0), (-1, -1), 0),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+    ]))
+    story.append(t)
+
+
 def code(text, caption=None):
     story.append(Paragraph(text.replace(" ", "&nbsp;").replace("\n", "<br/>"),
                            CODE))
@@ -418,17 +431,10 @@ def cover_page():
             h, w = 3.0 * cm, 3.0 * cm * iw / ih
         story.append(Image(str(logo), width=w, height=h))
     else:
-        story.append(Table(
-            [[Paragraph("[UNIVERSITY LOGO]<br/><font size=8>save the logo as "
-                        "report/figures/university_logo.png and rebuild"
-                        "</font>",
-                        ParagraphStyle("lg", parent=BODYC, fontSize=9,
-                                       textColor=colors.HexColor("#777777")))]],
-            colWidths=[9.0 * cm], rowHeights=[2.4 * cm],
-            style=TableStyle([
-                ("BOX", (0, 0), (-1, -1), 0.6, colors.HexColor("#aaaaaa")),
-                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-            ]), hAlign="CENTER"))
+        # No logo file supplied: leave clean blank space of the same
+        # height so the logo can be pasted in without disturbing the
+        # rest of the cover layout.
+        story.append(Spacer(1, 3.0 * cm))
     sp(10)
 
     p(f"<b><font size=16>{D('UNIVERSITY NAME')}</font></b>", BODYC)
@@ -484,13 +490,13 @@ def certificate():
       "for the award of the degree stated above. The work presented has "
       "not been submitted elsewhere for the award of any other degree.")
     sp(28)
-    table([[Paragraph("_____________________<br/><br/>"
-                      f"<b>{D('FACULTY MENTOR NAME')}</b><br/>"
-                      "Faculty Mentor", BODY),
-            Paragraph("_____________________<br/><br/>"
-                      f"<b>{D('HEAD OF DEPARTMENT NAME')}</b><br/>"
-                      "Head of Department", BODY)]],
-          widths=[7.2 * cm, 7.2 * cm], header=False)
+    plain_table([[Paragraph("_____________________<br/><br/>"
+                            f"<b>{D('FACULTY MENTOR NAME')}</b><br/>"
+                            "Faculty Mentor", BODY),
+                  Paragraph("_____________________<br/><br/>"
+                            f"<b>{D('HEAD OF DEPARTMENT NAME')}</b><br/>"
+                            "Head of Department", BODY)]],
+                [7.2 * cm, 7.2 * cm])
     sp(18)
     p(f"Date: {D('DATE OF SUBMISSION')}<br/>Place: {D('PLACE')}")
     story.append(PageBreak())
@@ -510,13 +516,13 @@ def declaration():
       "acknowledged in the references. This report has not been submitted "
       "for the award of any other degree or diploma.")
     sp(34)
-    table([[Paragraph(f"Date: {D('DATE OF SUBMISSION')}<br/>"
-                      f"Place: {D('PLACE')}", BODY),
-            Paragraph("_____________________<br/>"
-                      f"<b>{D('STUDENT NAME')}</b><br/>"
-                      f"{D('ENROLLMENT NUMBER')}<br/>"
-                      f"{D('PROGRAM')}", BODY)]],
-          widths=[7.2 * cm, 7.2 * cm], header=False)
+    plain_table([[Paragraph(f"Date: {D('DATE OF SUBMISSION')}<br/>"
+                            f"Place: {D('PLACE')}", BODY),
+                  Paragraph("_____________________<br/>"
+                            f"<b>{D('STUDENT NAME')}</b><br/>"
+                            f"{D('ENROLLMENT NUMBER')}<br/>"
+                            f"{D('PROGRAM')}", BODY)]],
+                [7.2 * cm, 7.2 * cm])
     story.append(PageBreak())
 
 

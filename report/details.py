@@ -23,8 +23,7 @@ DETAILS = {
     "DEPARTMENT NAME":     "Department of Computer Science &amp; Engineering",
 
     # --- supervisors ---------------------------------------------
-    # NOT SUPPLIED — the internal guide who signs the certificate.
-    "FACULTY MENTOR NAME": "[FACULTY MENTOR NAME]",
+    "FACULTY MENTOR NAME": "Mrs. Sonali Mahajan",
 
     "HEAD OF DEPARTMENT NAME": "Dr. Ashish Bhushan Khare",
     "INDUSTRY MENTOR NAME":    "Swasti Mishra",
