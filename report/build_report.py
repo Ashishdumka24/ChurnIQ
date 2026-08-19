@@ -19,6 +19,7 @@ Run:  python report/build_report.py
 from pathlib import Path
 import datetime as _dt
 import re
+import sys
 
 import pandas as pd
 from reportlab.lib import colors
@@ -27,8 +28,9 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import cm, mm
 from reportlab.platypus import (
-    BaseDocTemplate, Frame, PageTemplate, Paragraph, Spacer, Table, TableStyle,
-    Image, PageBreak, KeepTogether, CondPageBreak, NextPageTemplate,
+    BaseDocTemplate, Frame, PageTemplate, Paragraph as _RLParagraph, Spacer,
+    Table, TableStyle, Image, PageBreak, KeepTogether, CondPageBreak,
+    NextPageTemplate,
 )
 from reportlab.platypus.flowables import Flowable
 
@@ -169,6 +171,56 @@ NOTE = S("note", parent=BODY, fontSize=10.5, leading=15,
          backColor=colors.HexColor("#fdf6e3"), borderColor=colors.HexColor("#d6c68a"),
          borderWidth=0.6, borderPadding=8, spaceBefore=6, spaceAfter=10)
 
+# ==================================================================
+# Personal / college / internship details
+# ------------------------------------------------------------------
+# Values live in report/details.py. Any field left at its bracketed
+# default is rendered unchanged, so unfilled information stays visible
+# rather than being quietly invented.
+# ==================================================================
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+try:
+    from details import DETAILS as _DETAILS, PHASE_WEEKS as _PHASE_WEEKS
+except ImportError:            # details.py absent -> keep placeholders
+    _DETAILS, _PHASE_WEEKS = {}, []
+
+_PH_RE = re.compile(r"\[([A-Z][A-Z0-9 /-]*)\]")
+
+
+def fill(text):
+    """Replace [PLACEHOLDER] tokens with supplied details."""
+    if not isinstance(text, str):
+        return text
+    def sub(m):
+        val = _DETAILS.get(m.group(1))
+        if val is None or _PH_RE.fullmatch(str(val).strip()):
+            return m.group(0)          # not supplied -> leave visible
+        return str(val)
+    return _PH_RE.sub(sub, text)
+
+
+class Paragraph(_RLParagraph):
+    """Paragraph that resolves [PLACEHOLDER] tokens as it is built.
+
+    Substituting here rather than at each call site means no rendered
+    string can accidentally bypass the details file.
+    """
+
+    def __init__(self, text, *a, **kw):
+        if isinstance(text, str):
+            text = fill(text)
+        super().__init__(text, *a, **kw)
+
+
+def phase_week(i):
+    """Week range for phase i (1-based); placeholder if not supplied."""
+    if i <= len(_PHASE_WEEKS):
+        v = str(_PHASE_WEEKS[i - 1]).strip()
+        if v and not _PH_RE.fullmatch(v):
+            return v
+    return "[WEEK RANGE]"
+
+
 story = []
 figno = {}
 tabno = {}
@@ -241,7 +293,7 @@ def page_ref(key):
 # Helpers
 # ==================================================================
 def p(text, style=BODY):
-    story.append(Paragraph(text, style))
+    story.append(Paragraph(fill(text), style))
 
 
 def h1(text):
@@ -276,7 +328,7 @@ def bullets(items, style=BODY, indent=14):
     st = ParagraphStyle("b", parent=style, leftIndent=indent,
                         bulletIndent=4, spaceAfter=3.5)
     for it in items:
-        story.append(Paragraph(it, st, bulletText="•"))
+        story.append(Paragraph(fill(it), st, bulletText="•"))
     sp(5)
 
 
@@ -319,7 +371,7 @@ def table(data, caption=None, chapter=None, widths=None, align="LEFT",
                 if fs != 9.5:
                     st = ParagraphStyle("t", parent=st, fontSize=fs,
                                         leading=fs + 3)
-                cells.append(Paragraph(str(c), st))
+                cells.append(Paragraph(fill(str(c)), st))
         rows.append(cells)
 
     t = Table(rows, colWidths=widths, repeatRows=1 if header else 0,
@@ -434,7 +486,7 @@ def title_page():
     p("Submitted in partial fulfilment of the requirements<br/>for the award of the degree of",
       S("t3", fontName="Times-Roman", fontSize=11.5, alignment=TA_CENTER,
         leading=17, spaceAfter=8))
-    p("<b>[DEGREE — e.g. BACHELOR OF TECHNOLOGY]</b>",
+    p("<b>[DEGREE]</b>",
       S("t4", fontName="Times-Bold", fontSize=13, alignment=TA_CENTER,
         leading=17, spaceAfter=4))
     p("in<br/><b>[COURSE / BRANCH]</b>",
@@ -1019,24 +1071,24 @@ def chapter2():
     table([
         ["Phase", "Activity", "Primary Deliverable", "Duration"],
         ["1", "Problem study, dataset acquisition and project setup",
-         "Repository structure, Data/Telco-Customer-Churn.csv", "[WEEK RANGE]"],
+         "Repository structure, Data/Telco-Customer-Churn.csv", phase_week(1)],
         ["2", "Dataset validation and cleaning",
-         "dataset_validator.py, clean_data.py, telco_churn_clean.csv", "[WEEK RANGE]"],
-        ["3", "Exploratory data analysis", "eda.py", "[WEEK RANGE]"],
+         "dataset_validator.py, clean_data.py, telco_churn_clean.csv", phase_week(2)],
+        ["3", "Exploratory data analysis", "eda.py", phase_week(3)],
         ["4", "Feature engineering and preprocessing pipeline",
-         "feature_engineering.py, telco_churn_processed.csv", "[WEEK RANGE]"],
+         "feature_engineering.py, telco_churn_processed.csv", phase_week(4)],
         ["5", "Model training and comparison",
-         "model_training.py, model_results.csv", "[WEEK RANGE]"],
+         "model_training.py, model_results.csv", phase_week(5)],
         ["6", "Model evaluation and persistence",
-         "best_churn_model.pkl, preprocessing.pkl", "[WEEK RANGE]"],
+         "best_churn_model.pkl, preprocessing.pkl", phase_week(6)],
         ["7", "Prediction pipeline development",
-         "prediction_pipeline.py, prediction_pipeline_backup.py", "[WEEK RANGE]"],
+         "prediction_pipeline.py, prediction_pipeline_backup.py", phase_week(7)],
         ["8", "Customer intelligence and segmentation",
-         "segmentation.py, customer_segments.csv", "[WEEK RANGE]"],
+         "segmentation.py, customer_segments.csv", phase_week(8)],
         ["9", "Recommendation engine and analytics",
-         "recommendations.py, dashboard_analytics.py", "[WEEK RANGE]"],
+         "recommendations.py, dashboard_analytics.py", phase_week(9)],
         ["10", "Dashboard development, styling and testing",
-         "app.py, style.css", "[WEEK RANGE]"],
+         "app.py, style.css", phase_week(10)],
     ], "Phase-wise execution plan", 2,
         widths=[1.3 * cm, 4.8 * cm, 6.6 * cm, 2.9 * cm])
 
