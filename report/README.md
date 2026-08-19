@@ -1,156 +1,106 @@
-# ChurnIQ — Project Report
+# ChurnIQ — Summer Internship Project Report
 
-This directory generates `ChurnIQ_Project_Report.pdf`, a 106-page academic
-report describing the ChurnIQ system.
+Generates `ChurnIQ_Project_Report.pdf` (40 pages) in the format
+prescribed by Amrapali University.
 
-Every number, table and figure in the report is derived from this repository
-at build time — the dataset files in `Data/`, the metrics in
-`Models/model_results.csv`, and the metadata inside
-`Models/best_churn_model.pkl`. Nothing is transcribed by hand, so the report
-cannot drift out of step with the code.
+All technical content is read from the repository at build time — the
+datasets in `Data/`, the metrics in `Models/model_results.csv` and the
+metadata inside `Models/best_churn_model.pkl` — so the report cannot
+drift away from the code.
 
-## Contents
-
-| File | Purpose |
-| --- | --- |
-| `build_report.py` | Builds the PDF. Reads the repository's data and models directly. |
-| `make_figures.py` | Regenerates the 15 data figures in `figures/`. |
-| `make_diagrams.py` | Regenerates the 7 design diagrams in `figures/`. |
-| `figures/` | 22 PNGs used by the report. |
-| `pipeline_output_sample.csv` | Sample of real pipeline output, used in Appendix C. |
-| `ChurnIQ_Project_Report.pdf` | The generated report. |
-
-## Regenerating
+## Rebuilding
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
-pip install reportlab pandas numpy scikit-learn joblib pillow matplotlib seaborn
+pip install reportlab pandas numpy scikit-learn joblib pillow
 
-python report/make_figures.py      # only if the data changed
-python report/make_diagrams.py     # only if the design changed
 python report/build_report.py
 ```
 
-`build_report.py` runs from the repository root and writes the PDF next to
-itself. The build is deterministic: the same inputs produce the same text.
-
-### Why the build runs several passes
-
-The table of contents, list of figures and list of tables carry real page
-numbers. Filling those lists in changes their length, which shifts every page
-after them, which changes the numbers again. The builder therefore records
-where each heading, figure and table actually landed and rebuilds until the
-page assignments stop changing — normally three passes. It prints:
+The builder runs several passes and prints when it settles:
 
 ```
-Converged after 3 pass(es); front matter = 15 pages.
+Converged after 3 pass(es); front matter = 8 pages.
 ```
 
-If it ever reports that numbering did not settle, the page numbers in the
-front matter should not be trusted.
+It repeats because the table of contents carries real page numbers, and
+filling it in shifts every page after it. If it ever reports that
+numbering did not settle, the page numbers should not be trusted.
 
-## Conforming to a college format specification
+## Format applied
 
-All layout values are collected in a single `FMT` dictionary near the top of
-`build_report.py`, so matching a required format means editing one block and
-rebuilding — no hunting through 4,000 lines.
-
-```python
-FMT = {
-    "page_size":        A4,
-    "margin_left_cm":   2.4,     # wider left margin for binding
-    "margin_right_cm":  2.2,
-    "margin_top_cm":    2.0,
-    "margin_bottom_cm": 2.0,
-
-    "body_font":        "Times-Roman",
-    "body_size":        11.5,
-    "body_leading":     17.0,    # line spacing, in points
-    ...
-}
-```
-
-Common requirements and the values that satisfy them:
-
-| Requirement | Change |
+| Item | Setting |
 | --- | --- |
-| Times New Roman 12 pt | `"body_size": 12.0` |
-| 1.5 line spacing | `"body_leading": body_size * 1.5` (e.g. `18.0`) |
-| Double line spacing | `"body_leading": body_size * 2` (e.g. `24.0`) |
-| 1.5 inch left margin | `"margin_left_cm": 3.81` |
-| 1 inch other margins | `"margin_right/top/bottom_cm": 2.54` |
-| Black-and-white printing | `"heading_colour": False` |
-| Continuous arabic numbering | `"roman_front_matter": False` |
-| No running header | `"running_header": False` |
+| Paper | A4 |
+| Font | Times New Roman 12 pt |
+| Headings | 14 pt bold |
+| Line spacing | 1.5 |
+| Margins | Left 1.5 in, others 1 in |
+| Printing | Single side |
+| Length | 40 pages |
 
-Changing spacing or margins changes the page count, but the page numbers in
-the table of contents and the two lists are recomputed automatically on every
-build, so they stay correct without any manual work.
+These live in the `FMT` dictionary near the top of `build_report.py`.
 
-## Before submitting
+## Two things still to add
 
-Two things still need your input.
+### 1. University logo
 
-### 1. Fill in the bracketed placeholders
+Save the logo as **`report/figures/university_logo.png`** and rebuild.
+The builder also accepts `.jpg`, `.jpeg`, `.webp`, `.gif` and `.bmp`,
+and will find it under a few common names (`logo`, `amrapali`, and so
+on) in `report/figures/`, `report/` or the repository root.
 
-No personal, college or internship detail was invented. The report contains
-**70 bracketed placeholders across 28 distinct fields**, all of which must be
-replaced with real values. They are written as `[LIKE THIS]` so they are
-impossible to miss on a read-through.
+The surrounding white border is cropped automatically before the logo is
+placed, so a small mark on a large white canvas still prints at a
+sensible size. Until a file is present the cover shows a labelled empty
+frame rather than a substituted graphic.
 
-They are concentrated in a handful of places, so editing is quick:
+### 2. Faculty mentor name
 
-| Where | Report pages | Fields |
-| --- | --- | --- |
-| Title, Certificate, Declaration, Acknowledgement | i–iv | name, roll number, course, college, university, department, mentors, degree, session, dates, place |
-| Chapter 2 (Organisation, Duration) | 6–7 | organisation name and address, nature, industry mentor, mode, start/end dates, duration, working hours |
-| Table 2.3 (Phase-wise plan) | 8 | `[WEEK RANGE]` for each of the 10 phases |
+`[FACULTY MENTOR NAME]` appears on the certificate and in the
+acknowledgement. This is the internal college guide, not the industry
+mentor. Set it in `report/details.py` and rebuild.
 
-To find them all in the source:
+### 3. Dashboard screenshots
 
-```bash
-grep -n '\[[A-Z][A-Z0-9 /-]*\]' report/build_report.py
-```
-
-Edit `build_report.py`, then rebuild. Do not edit the PDF directly, or your
-changes will be lost the next time the report is generated.
-
-### 2. Insert the dashboard screenshots
-
-Appendix D contains **12 labelled placeholder boxes** rather than screenshots.
-None were fabricated. To capture them:
+The appendix holds eight labelled frames. To capture them:
 
 ```bash
 streamlit run app.py
 ```
 
-Open the URL shown, load the default dataset, then run the analysis from the
-Prediction Center **first** — several pages stay empty until predictions
-exist. Capture each of the 12 pages listed in Appendix D and insert them in
-place of the corresponding boxes.
+Load the default dataset and run the analysis from the Prediction Center
+**first** — several pages stay empty until predictions exist.
+
+## Details
+
+Personal, college and internship details are in `report/details.py`.
+Any field left in `[BRACKETS]` renders as a visible placeholder rather
+than being invented, so nothing unverified can slip into the report
+unnoticed.
+
+The internship duration ("Approximately 6 weeks") is derived from the
+supplied start and end dates, not assumed.
 
 ## A note on the two "best" models
 
-The report does not paper over an inconsistency that exists in the code:
+The report records an inconsistency that exists in the code rather than
+hiding it:
 
-- `Src/model_training.py` → `select_best_model()` ranks by **F1**, so the
-  model saved to `Models/best_churn_model.pkl` is **Random Forest**
-  (F1 0.6226).
-- `Src/dashboard_analytics.py` → `get_best_model_metrics()` ranks by
-  **ROC-AUC**, so the dashboard displays **Gradient Boosting** as best
-  (ROC-AUC 0.8437).
+- `Src/model_training.py` ranks by **F1**, so the saved model is
+  **Random Forest** (F1 0.6226).
+- `Src/dashboard_analytics.py` ranks by **ROC-AUC**, so the dashboard
+  displays **Gradient Boosting** (ROC-AUC 0.8437).
 
-Both statements are true under their own criterion. This is documented as an
-observed discrepancy in sections 8.8, 13.7 and 14.1 rather than resolved
-silently. If you would rather the report present a single best model, change
-the ranking criterion in the code first and rebuild — the report will follow.
+Both are correct under their own criterion. This is documented in
+section 8.6. To present a single best model, change the ranking
+criterion in the code and rebuild.
 
 ## Scope of claims
 
-The report describes only functionality present in this repository. Test cases
-in Chapter 12 are marked either **Executed** (run against the code) or
-**Derived** (logically implied by the implementation but not run), and
-improvements that are not implemented are labelled **FUTURE SCOPE**. The
-recommendation engine is described as producing analytical suggestions from
-historical patterns, not guaranteed retention outcomes.
+The report describes only functionality present in this repository.
+Test cases in Chapter 12 are marked **Executed** or **Derived**, and
+unimplemented improvements are labelled **FUTURE SCOPE**. The system is
+described as prioritising customers likely to churn, not as guaranteeing
+retention.

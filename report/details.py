@@ -8,9 +8,7 @@ being invented.
 
 DETAILS = {
     # --- student -------------------------------------------------
-    # NOT SUPPLIED — required on the cover page, certificate and
-    # declaration. Replace the bracketed text and rebuild.
-    "STUDENT NAME":        "[STUDENT NAME]",
+    "STUDENT NAME":        "Ashish Dumka",
 
     "ENROLLMENT NUMBER":   "2410302008",
     "PROGRAM":             "B.Tech CSE (AI&amp;ML)",

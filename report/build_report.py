@@ -353,21 +353,78 @@ def plain_page(canvas, doc):
 # ==================================================================
 # FRONT MATTER
 # ==================================================================
+
+def _find_logo():
+    """Locate the university logo, whatever it was named or saved as.
+
+    Drop the file in report/figures/ (or report/) as university_logo.png,
+    logo.jpg, or similar; the first match is used.
+    """
+    names = ["university_logo", "logo", "amrapali", "amrapali_logo",
+             "images (1)", "images"]
+    exts = [".png", ".jpg", ".jpeg", ".webp", ".gif", ".bmp"]
+    for folder in (FIG, REPORT, BASE):
+        for n in names:
+            for e in exts:
+                cand = folder / f"{n}{e}"
+                if cand.exists():
+                    return cand
+    return None
+
+
+
+def _prepare_logo():
+    """Return a logo trimmed of its surrounding white border.
+
+    Logos are usually supplied as a small mark centred on a large white
+    canvas. Placed as-is the artwork prints far too small, so the blank
+    margin is cropped and the trimmed copy cached alongside the original.
+    """
+    src = _find_logo()
+    if src is None:
+        return None
+    try:
+        from PIL import Image as PILImage, ImageChops
+        im = PILImage.open(src).convert("RGB")
+        # Difference against a pure-white canvas; the bounding box of the
+        # non-white pixels is the actual artwork.
+        bg = PILImage.new("RGB", im.size, (255, 255, 255))
+        bbox = ImageChops.difference(im, bg).getbbox()
+        if bbox:
+            pad = 4
+            bbox = (max(bbox[0] - pad, 0), max(bbox[1] - pad, 0),
+                    min(bbox[2] + pad, im.width),
+                    min(bbox[3] + pad, im.height))
+            im = im.crop(bbox)
+        out = FIG / "_logo_trimmed.png"
+        im.save(out)
+        return out
+    except Exception:
+        return src           # fall back to the untrimmed original
+
+
 def cover_page():
     story.append(NextPageTemplate("Later"))
     sp(6)
     # University logo. No image file was supplied, so a labelled frame is
     # printed instead of substituting an unrelated graphic.
-    logo = FIG / "university_logo.png"
-    if logo.exists():
-        story.append(Image(str(logo), width=3.0 * cm, height=3.0 * cm))
+    logo = _prepare_logo()
+    if logo is not None:
+        from PIL import Image as PILImage
+        iw, ih = PILImage.open(logo).size
+        # Fit inside a 11cm x 3.0cm box without distorting the artwork.
+        w, h = 11.0 * cm, 11.0 * cm * ih / iw
+        if h > 3.0 * cm:
+            h, w = 3.0 * cm, 3.0 * cm * iw / ih
+        story.append(Image(str(logo), width=w, height=h))
     else:
         story.append(Table(
-            [[Paragraph("[UNIVERSITY LOGO]<br/><font size=8>paste the "
-                        "official logo here</font>",
+            [[Paragraph("[UNIVERSITY LOGO]<br/><font size=8>save the logo as "
+                        "report/figures/university_logo.png and rebuild"
+                        "</font>",
                         ParagraphStyle("lg", parent=BODYC, fontSize=9,
                                        textColor=colors.HexColor("#777777")))]],
-            colWidths=[3.6 * cm], rowHeights=[2.5 * cm],
+            colWidths=[9.0 * cm], rowHeights=[2.4 * cm],
             style=TableStyle([
                 ("BOX", (0, 0), (-1, -1), 0.6, colors.HexColor("#aaaaaa")),
                 ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
